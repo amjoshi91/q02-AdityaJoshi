@@ -1,0 +1,296 @@
+        -:    0:Source:Piezas.cpp
+        -:    0:Graph:Piezas.gcno
+        -:    0:Data:Piezas.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "Piezas.h"
+        -:    2:#include <vector>
+        -:    3:#include <iostream>
+        -:    4:using namespace std;
+        -:    5:/** CLASS Piezas
+        -:    6: * Class for representing a Piezas vertical board, which is roughly based
+        -:    7: * on the game "Connect Four" where pieces are placed in a column and 
+        -:    8: * fall to the bottom of the column, or on top of other pieces already in
+        -:    9: * that column. For an illustration of the board, see:
+        -:   10: *  https://en.wikipedia.org/wiki/Connect_Four
+        -:   11: *
+        -:   12: * Board coordinates [row,col] should match with:
+        -:   13: * [2,0][2,1][2,2][2,3]
+        -:   14: * [1,0][1,1][1,2][1,3]
+        -:   15: * [0,0][0,1][0,2][0,3]
+        -:   16: * So that a piece dropped in column 2 should take [0,2] and the next one
+        -:   17: * dropped in column 2 should take [1,2].
+        -:   18:**/
+        -:   19:
+function _ZN6Piezas6toggleEv called 45 returned 100% blocks executed 100%
+       45:   20:Piece Piezas::toggle()
+        -:   21:{
+       45:   22:	if(turn == X)
+branch  0 taken 24 (fallthrough)
+branch  1 taken 21
+       24:   23:		turn = O;
+        -:   24:	else
+       21:   25:		turn = X;
+       45:   26:	return turn;
+        -:   27:}
+        -:   28:/**
+        -:   29: * Constructor sets an empty board (default 3 rows, 4 columns) and 
+        -:   30: * specifies it is X's turn first
+        -:   31:**/
+function _ZN6PiezasC2Ev called 9 returned 100% blocks executed 57%
+        9:   32:Piezas::Piezas()
+call    0 returned 9
+call    1 never executed
+        -:   33:{
+        9:   34:	board.resize(BOARD_ROWS, vector<Piece>(BOARD_COLS,Blank) );
+call    0 returned 9
+call    1 returned 9
+branch  2 taken 9 (fallthrough)
+branch  3 taken 0 (throw)
+call    4 returned 9
+branch  5 taken 9 (fallthrough)
+branch  6 taken 0 (throw)
+call    7 returned 9
+branch  8 taken 9 (fallthrough)
+branch  9 taken 0 (throw)
+call   10 returned 9
+call   11 never executed
+call   12 never executed
+        9:   35:	turn = X;
+        9:   36:}
+        -:   37:
+        -:   38:/**
+        -:   39: * Resets each board location to the Blank Piece value, with a board of the
+        -:   40: * same size as previously specified
+        -:   41:**/
+function _ZN6Piezas5resetEv called 1 returned 100% blocks executed 100%
+        1:   42:void Piezas::reset()
+        -:   43:{
+        -:   44:	int i, j;
+        4:   45:	for(i = 0; i < 3; i++)
+branch  0 taken 3
+branch  1 taken 1 (fallthrough)
+        -:   46:	{
+       15:   47:		for(j = 0; j < 4; j++)
+branch  0 taken 12
+branch  1 taken 3 (fallthrough)
+       12:   48:			board[i][j] = Blank;
+call    0 returned 12
+call    1 returned 12
+        -:   49:	}
+        1:   50:}
+        -:   51:/**
+        -:   52: * Places a piece of the current turn on the board, returns what
+        -:   53: * piece is placed, and toggles which Piece's turn it is. dropPiece does 
+        -:   54: * NOT allow to place a piece in a location where a column is full.
+        -:   55: * In that case, placePiece returns Piece Blank value 
+        -:   56: * Out of bounds coordinates return the Piece Invalid value
+        -:   57: * Trying to drop a piece where it cannot be placed loses the player's turn
+        -:   58:**/ 
+function _ZN6Piezas9dropPieceEi called 45 returned 100% blocks executed 95%
+       45:   59:Piece Piezas::dropPiece(int column)
+        -:   60:{
+       45:   61:	if(column >= BOARD_COLS)
+branch  0 taken 1 (fallthrough)
+branch  1 taken 44
+        -:   62:	{
+        1:   63:		toggle();
+call    0 returned 1
+        1:   64:		return Invalid;
+        -:   65:	}
+       44:   66:	else if(board[0][column] != Blank)
+call    0 returned 44
+call    1 returned 44
+branch  2 taken 3 (fallthrough)
+branch  3 taken 41
+        -:   67:	{
+        3:   68:		toggle();
+call    0 returned 3
+        3:   69:		return Blank;
+        -:   70:	}
+        -:   71:	else
+        -:   72:	{
+        -:   73:		int i;
+        -:   74:		Piece returnValue;
+        -:   75:				
+       80:   76:		for(i = BOARD_ROWS - 1; i >= 0; i--)
+branch  0 taken 80
+branch  1 taken 0 (fallthrough)
+        -:   77:		{
+       80:   78:			if(board[i][column] == Blank)
+call    0 returned 80
+call    1 returned 80
+branch  2 taken 41 (fallthrough)
+branch  3 taken 39
+        -:   79:			{
+       41:   80:			board[i][column] = turn;
+call    0 returned 41
+call    1 returned 41
+       41:   81:			returnValue = turn;
+       41:   82:			toggle();
+call    0 returned 41
+       41:   83:			return returnValue;
+        -:   84:			break;
+        -:   85:			}
+        -:   86:		}
+        -:   87:	}
+    #####:   88:}
+        -:   89:/**
+        -:   90: * Returns what piece is at the provided coordinates, or Blank if there
+        -:   91: * are no pieces there, or Invalid if the coordinates are out of bounds
+        -:   92:**/
+function _ZN6Piezas7pieceAtEii called 26 returned 100% blocks executed 100%
+       26:   93:Piece Piezas::pieceAt(int row, int column)
+        -:   94:{
+       26:   95:	if(row >=0 && row < BOARD_ROWS)
+branch  0 taken 26 (fallthrough)
+branch  1 taken 0
+branch  2 taken 25 (fallthrough)
+branch  3 taken 1
+        -:   96:	{
+       25:   97:		if(column >=0 && column < BOARD_COLS)
+branch  0 taken 25 (fallthrough)
+branch  1 taken 0
+branch  2 taken 25 (fallthrough)
+branch  3 taken 0
+       25:   98:			return board[row][column];
+call    0 returned 25
+call    1 returned 25
+        -:   99:	}
+        1:  100:	return Invalid;
+        -:  101:}
+        -:  102:/**
+        -:  103: * Returns which Piece has won, if there is a winner, Invalid if the game
+        -:  104: * is not over, or Blank if the board is filled and no one has won ("tie").
+        -:  105: * For a game to be over, all locations on the board must be filled with X's 
+        -:  106: * and O's (i.e. no remaining Blank spaces). The winner is which player has
+        -:  107: * the most adjacent pieces in a single line. Lines can go either vertically
+        -:  108: * or horizontally. If both X's and O's have the same max number of pieces in a
+        -:  109: * line, it is a tie.
+        -:  110:**/
+function _ZN6Piezas9gameStateEv called 4 returned 100% blocks executed 96%
+        4:  111:Piece Piezas::gameState()
+        -:  112:{
+       13:  113:	for(int i = 0; i < BOARD_ROWS; i++)
+branch  0 taken 10
+branch  1 taken 3 (fallthrough)
+        -:  114:	{
+       46:  115:		for(int j = 0; j < BOARD_COLS; j++)
+branch  0 taken 37
+branch  1 taken 9 (fallthrough)
+        -:  116:		{
+       37:  117:			if(board[i][j] == Blank)
+call    0 returned 37
+call    1 returned 37
+branch  2 taken 1 (fallthrough)
+branch  3 taken 36
+        1:  118:				return Invalid;
+        -:  119:		}
+        -:  120:	}
+        -:  121:	int maxX, maxO, tempX, tempO;
+        3:  122:	maxX = 0;
+        3:  123:	maxO = 0;
+        3:  124:	tempX= 0;
+        3:  125:	tempO = 0;
+        -:  126:
+       12:  127:	for(int i = 0; i < BOARD_ROWS; i++)
+branch  0 taken 9
+branch  1 taken 3 (fallthrough)
+        -:  128:	{
+       45:  129:		for(int j = 0; j < BOARD_COLS; j++)
+branch  0 taken 36
+branch  1 taken 9 (fallthrough)
+        -:  130:		{
+       36:  131:			if(board[i][j] == X)
+call    0 returned 36
+call    1 returned 36
+branch  2 taken 18 (fallthrough)
+branch  3 taken 18
+        -:  132:			{
+       18:  133:				tempX+=1;
+       18:  134:				tempO=0;
+       18:  135:				if(tempX>maxX)
+branch  0 taken 11 (fallthrough)
+branch  1 taken 7
+       11:  136:					maxX = tempX;
+        -:  137:			}
+       18:  138:			else if(board[i][j] == O)
+call    0 returned 18
+call    1 returned 18
+branch  2 taken 18 (fallthrough)
+branch  3 taken 0
+        -:  139:			{
+       18:  140:				tempO+=1;
+       18:  141:				tempX=0;
+       18:  142:				if(tempO>maxO)
+branch  0 taken 11 (fallthrough)
+branch  1 taken 7
+       11:  143:					maxO = tempO;
+        -:  144:			}
+        -:  145:		}
+        9:  146:		tempX=0;
+        9:  147:		tempO=0;
+        -:  148:	}
+        -:  149:
+        -:  150:	
+        3:  151:	tempX = 0;
+        3:  152:	tempO = 0;
+        -:  153:
+       15:  154:	for(int i = 0; i < BOARD_COLS; i++)
+branch  0 taken 12
+branch  1 taken 3 (fallthrough)
+        -:  155:	{
+       48:  156:		for(int j = 0; j < BOARD_ROWS; j++)
+branch  0 taken 36
+branch  1 taken 12 (fallthrough)
+        -:  157:		{
+       36:  158:			if(board[j][i] == X)
+call    0 returned 36
+call    1 returned 36
+branch  2 taken 18 (fallthrough)
+branch  3 taken 18
+        -:  159:			{
+       18:  160:				tempX+=1;
+       18:  161:				tempO=0;
+       18:  162:				if(tempX>maxX)
+branch  0 taken 0 (fallthrough)
+branch  1 taken 18
+    #####:  163:					maxX = tempX;
+        -:  164:			}
+       18:  165:			else if(board[j][i] == O)
+call    0 returned 18
+call    1 returned 18
+branch  2 taken 18 (fallthrough)
+branch  3 taken 0
+        -:  166:			{
+       18:  167:				tempO+=1;
+       18:  168:				tempX=0;
+       18:  169:				if(tempO>maxO)
+branch  0 taken 0 (fallthrough)
+branch  1 taken 18
+    #####:  170:					maxO = tempO;
+        -:  171:			}
+        -:  172:		}
+       12:  173:		tempX=0;
+       12:  174:		tempO=0;
+        -:  175:	}
+        -:  176:
+        3:  177:	if(maxX == maxO)
+branch  0 taken 1 (fallthrough)
+branch  1 taken 2
+        1:  178:		return Blank;
+        2:  179:	if(maxX>maxO)
+branch  0 taken 1 (fallthrough)
+branch  1 taken 1
+        1:  180:		return X;
+        1:  181:	return O;
+function _GLOBAL__sub_I__ZN6Piezas6toggleEv called 1 returned 100% blocks executed 100%
+function _Z41__static_initialization_and_destruction_0ii called 1 returned 100% blocks executed 100%
+        3:  182:}
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0
+branch  3 taken 1 (fallthrough)
+branch  4 taken 0
+        -:  183:
+        -:  184:
